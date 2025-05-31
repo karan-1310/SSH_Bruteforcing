@@ -1,78 +1,121 @@
-Introduction
-SSH BruteForce is a Python script developed to perform brute force attacks on SSH servers by attempting various passwords for a specified username. It assists in testing the security of SSH configurations.
-
-Author
-Name: Karan Shukla
+SSH Brute Force Testing Project — Execution Guide
+User ID: karan-1310
 GitHub: https://github.com/karan-1310
 
-Features
-
-Password guessing for a specified username on an SSH server.
-
-Utilizes asyncio for asynchronous execution to improve performance.
-
-Color-coded output for visually clear and informative display.
-
-Customizable through command-line arguments.
-
-Usage
-
-Clone the Repository:
-git clone https://github.com/yourusername/SSH-BruteForce.git
-
-Navigate to the Directory:
-cd SSH-BruteForce
-
-Install Dependencies:
-pip install asyncssh colorama termcolor
-
-Run the Script:
-python ssh_bruteforce.py -t <TARGET_HOST> -p <PORT> -w <WORDLIST_PATH> -u <USERNAME>
+Overview
+This project demonstrates how to perform an SSH brute force attack simulation on a local machine using a Python script (ssh_bruteforce.py) and a password wordlist (wordlist.txt). The goal is to understand how brute force attacks work and how to verify password security.
 
 Prerequisites
+A Windows laptop or PC with Windows 10 or later.
 
-Python 3.x installed.
+Python 3 installed. (Recommended: Anaconda or official Python installer)
 
-Python libraries: asyncssh, colorama, termcolor.
+Administrator access to run some commands.
 
-Command-line Arguments
+Basic knowledge of PowerShell or Command Prompt.
 
--t, --target: Host to attack (e.g., 10.10.10.10).
+Text editor (Notepad or any simple editor).
 
--p, --port: SSH port to attack (Default is 22).
 
--w, --wordlist: Path to the wordlist file.
+Step-by-Step Execution
+Step 1: Setup SSH Server on Windows
+Enable OpenSSH Server on your Windows PC:
 
--u, --username: Username to perform brute force.
+Open PowerShell as Administrator.
 
-Example Usage
+Run this command to check if SSH Server is installed:
+Get-Service -Name sshd
+If status is not "Running", install and start SSH Server:
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+Confirm SSH server is running and listening on port 22:
+netstat -an | findstr ":22"
 
-bash
-Copy
-Edit
-python ssh_bruteforce.py -t 10.10.10.10 -p 22 -w wordlist.txt -u admin
-Output
+You should see lines showing port 22 in LISTENING state.
 
-Color-coded result for each attempt (success or failure).
+Step 2: Create Test User and Set Password
+Create a new test user for brute force testing:
+net user bruteforce_test newpassword
+net user bruteforce_test newpassword
+Replace newpassword with any initial password.
 
-Displays host, login, and password if authentication succeeds.
+Change password to your known password (for example):
+net user bruteforce_test Test@12345
 
-Wordlist
 
-Required for the tool to function.
+Step 3: Prepare Your Wordlist
+Create a text file named wordlist.txt on your Desktop.
 
-Should be a text file containing possible passwords to test.
+Add multiple possible passwords line by line, for example:
+123456
+admin123
+letmein
+Test@12345
+password123
 
-Concurrency Limit
+Make sure your actual password (like Test@12345) is included somewhere in this list.
 
-Uses asyncio concurrency to manage simultaneous login attempts.
+Step 4: Place the Python Script and Wordlist
+Download or copy the ssh_bruteforce.py file to your Desktop folder.
 
-Concurrency can be adjusted via the concurrency_limit variable in the script depending on system resources and server load tolerance.
+Ensure wordlist.txt is also saved on the Desktop.
 
-Exception Handling
+Your directory should look like:
+C:\Users\karan-1310\Desktop\
+    ├── ssh_bruteforce.py
+    └── wordlist.txt
+Step 5: Run the Brute Force Script
+Open PowerShell (normal user is fine).
 
-Gracefully handles errors and exceptions during execution.
+Change directory to Desktop:
+cd $env:USERPROFILE\Desktop
+Run the brute force script with:
+python ssh_bruteforce.py -t localhost -p 22 -w wordlist.txt -u bruteforce_test
 
-Provides informative output about progress and login attempts.
+Here:
 
-Logs failed attempts and announces when the correct password is found.
+-t localhost means target is your own machine.
+
+-p 22 is the SSH port.
+
+-w wordlist.txt is the file with passwords.
+
+-u bruteforce_test is the username.
+
+The script will try each password from the list until it finds the correct one or exhausts the list.
+
+
+Step 6: Interpreting the Output
+The script prints each password attempt.
+
+When it finds the correct password, you will see a message like:
+[22] [ssh] host:localhost  login:bruteforce_test  password:Test@12345
+This means the password Test@12345 was successful for user bruteforce_test.
+
+
+Troubleshooting & Tips
+If you get errors about missing files, make sure you are running the script from the folder where the script and wordlist exist.
+
+If you see encoding errors when redirecting output (> output.txt), avoid redirecting or change console code page with:
+chcp 65001
+
+
+If the script uses colors and causes issues, disable or comment out banner coloring in the Python script.
+
+Always include your real password in the wordlist.txt to test if the brute force works.
+
+Summary for Beginners
+Set up SSH server on your Windows.
+
+Create a user and set a password.
+
+Prepare a list of passwords including your known password.
+
+Run the Python brute force script pointing to your user and wordlist.
+
+Observe output to see which password worked.
+
+This simple project helps you learn how brute force attacks work and understand the importance of using strong passwords.
+
+If you want, you can also visit my GitHub: https://github.com/karan-1310 for the full code and files.
