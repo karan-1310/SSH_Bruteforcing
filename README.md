@@ -1,8 +1,4 @@
-Certainly, Karan! Here's the **complete `README.md` content** in one go — formatted, professional, and ready to copy-paste:
 
----
-
-```markdown
 # 🔐 SSH Brute Force Attack Simulation
 
 This project demonstrates how to simulate an **SSH brute force attack** on a **local machine** using a Python script (`ssh_bruteforce.py`) and a password wordlist (`wordlist.txt`). The purpose is purely **educational** — to understand how brute-force attacks work, assess password strength, and promote better security practices.
